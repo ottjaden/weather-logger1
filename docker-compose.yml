@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  weather-fetcher:
+    build: .
+    container_name: weather-logger
+    volumes:
+      - ./data:/data
+    env_file:
+      - .env
+    tty: true
+
+  log-viewer:
+    image: python:3.9
+    container_name: log-viewer
+    volumes:
+      - ./data:/app/data
+    working_dir: /app
+    command: python -m http.server 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - weather-fetcher
+
